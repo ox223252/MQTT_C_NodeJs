@@ -1,16 +1,16 @@
 # MQTT / C / Node js
 
-This is an example of how to build a project using a **MQTT** server over **NoeJs** with **C** software.
+This is an example of how to build a project using a **MQTT** server over **Node Js** with **C** software.
 
 ## Usage:
 
 ### Test MQTT broker:
 
 ```shell
-~/MQTT_C_NodeJs/ > sudo apt-get install mosquitto mosquitto_pub npm nodejs
-~/MQTT_C_NodeJs/ > ./genKey.sh
+~/MQTT_C_NodeJs > sudo apt-get install npm nodejs
+~/MQTT_C_NodeJs > ./genKey.sh
 ...
-~/MQTT_C_NodeJs/ > cd Nodejs
+~/MQTT_C_NodeJs > cd Nodejs
 ~/MQTT_C_NodeJs/NodeJs > npm install
 ~/MQTT_C_NodeJs/NodeJs > js index.js
 web server listening on 4000
@@ -18,15 +18,38 @@ Mosca server is up and running
 ...
 ```
 
-Open a webBrowser and got to the server web page, copy / past the displayed cmd to a new term, that should work.
+Open a web browser and go to the server web page, copy / paste the displayed cmd to a new term, that should work.
 
 ### Test C publisher:
+
+```shell
+~/MQTT_C_NodeJs > git clone https://github.com/eclipse/mosquitto.git
+~/MQTT_C_NodeJs > make
+~/MQTT_C_NodeJs > make install
+~/MQTT_C_NodeJs > cd C
+~/MQTT_C_NodeJs/C > ./Configure/config
+~/MQTT_C_NodeJs/C > make
+~/MQTT_C_NodeJs/C > ./bin/exec
+```
+
+The web page should add two msg to it's content:
+
+```
+C msg
+C client stoped
+```
+
+On the Node Js term it should appear a new line:
+
+```shell
+MQTT: C_soft connected
+```
 
 
 
 ## SSL:
 
-If you want to use SSL/TSL encryption for your software use **./genKey.sh**.
+If you want to use SSL/TLS encryption for your software use **./genKey.sh**.
 
 ### Usage:
 
@@ -64,7 +87,7 @@ Inpired by [mosquitto](https://mosquitto.org/man/mosquitto-tls-7.html) explanati
 
 ### Customize:
 
-You should customize the key gen by changin this vars:
+You should customize the keygen by changing this vars:
 
 |                                   | C <br>(contry) | ST <br>(state) | L <br>'(city) | O <br>(organization) | OU <br>(organization unit) | CN <br>(comon name) |
 | --------------------------------- | -------------- | -------------- | ------------- | -------------------- | -------------------------- | ------------------- |
@@ -88,10 +111,41 @@ You could change the mode by commenting a small part of code (lines 34 - 38).
 	}
 ```
 
-If this part is commented, the server will work without **SSL / TLS** encryption, esle it'll work with that.
+If this part is commented, the server will work without **SSL / TLS** encryption, else it'll work with that.
 
 Before try to work with SSL you should generate keys.
 
-The default page of this server will display the availables commandes what you can use for tests prupose.
+The default page of this server will display the available commands what you can use for tests purpose.
 
 
+
+## MQTT ovec C:
+
+By default this sender is configured to work with the given NodeJs server, and to send one message and a disconnection message.
+
+If you want to work without SSL/TLS encryption you should comment line 64 to 69:
+
+```c
+if ( mosquitto_tls_opts_set ( mosq, 1, NULL, NULL ) ||
+		mosquitto_tls_set ( mosq, ca, NULL, cert, key, NULL ) ||
+		mosquitto_tls_insecure_set ( mosq, true ) )
+	{
+		return ( __LINE__ );
+	}
+```
+
+and change port line 32:
+
+```c
+const int port = 8883;
+```
+
+to 
+
+```c
+const int port = 1883;
+```
+
+according to the Node Js broker.
+
+Note that, if you whant to send multiple msg form differents part of a bigger code, you should add a tread with only one task, to execut periodicly *mosquitto_loop()* function, this function will keep the connection working.
