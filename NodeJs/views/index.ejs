@@ -1,0 +1,95 @@
+<!doctype html>  
+<html lang="en">  
+	<head>
+		<link href="logo.png" rel="icon">
+		<meta charset="utf-8">
+		<style>
+			html
+			{
+				background-color: #333;
+				text-align: center;
+			}
+			body
+			{
+				overflow: auto;
+				width: 600px;
+				margin: auto;
+				color: white;
+			}
+			section
+			{
+				text-align: left;
+			}
+			h1
+			{
+				color: orange;
+				font-weight: bold;
+			}
+			ul
+			{
+				overflow: auto;
+			}
+		</style>
+	</head>
+	<body>
+		<section id="command">
+			<% if ( secure ) 
+			{ %>
+				<h1>cmd : </h1>
+<pre>mosquitto_pub \
+	--cafile <%- dir %>/../ssl/ca.crt \
+	--key <%- dir %>/../ssl/client.key \
+	--cert <%- dir %>/../ssl/client.crt \
+	-h 127.0.0.1 \
+	-t "/date" \
+	-m "$(date)" \
+	-p <%- port %> \
+	--insecure</pre>
+<pre>mosquitto_pub \
+	--cafile <%- dir %>/../ssl/ca.crt \
+	--key <%- dir %>/../ssl/client.key \
+	--cert <%- dir %>/../ssl/client.crt \
+	-h 127.0.0.1 \
+	-t "/data" \
+	-m "mon message" \
+	-p <%- port %> \
+	--insecure</pre>
+			<% }
+			else
+			{ %>
+				cmd : <pre>mosquitto_pub -h 127.0.0.1 -t "/date" -m "$(date)" -p <%- port %></pre>
+				cmd : <pre>mosquitto_pub -h 127.0.0.1 -t "/data" -m "mon message" -p <%- port %></pre>
+			<% } %>
+			<ul>
+				<li id="date" ></li>
+				<li id="info" ></li>
+			</ul>
+		</section>
+		<script src="/socket.io/socket.io.js"></script>
+		<script>
+
+			// var
+			var socket = io.connect(window.location.origin);
+			var info = document.getElementById ( 'info' );
+			var date = document.getElementById ( 'date' );
+
+			socket.on ( '/date', function ( data )
+			{
+				date.innerHTML = data;
+			});
+
+			socket.on ( '/data', function ( data )
+			{
+				info.innerHTML += data + "<br>";
+			});
+
+			socket.on ( 'disconnect', function ( data )
+			{
+			});
+
+			socket.on ( 'connect', function ( data )
+			{
+			});
+		</script>
+	</body>
+</html>

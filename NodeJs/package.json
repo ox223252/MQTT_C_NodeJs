@@ -1,0 +1,29 @@
+{
+  "name": "example_srevr",
+  "version": "1.0.0",
+  "description": "example of MQTT / iosocket /express server working with SSL",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "github.com/ox223252/exMQTT"
+  },
+  "keywords": [
+    "MQTT",
+    "iosocket",
+    "express",
+    "SSL"
+  ],
+  "author": "ox223252",
+  "license": "GPL-2.0",
+  "dependencies": {
+    "ejs": "^2.6.1",
+    "express": "^4.16.3",
+    "fs": "0.0.1-security",
+    "http": "0.0.0",
+    "mosca": "^2.8.2",
+    "socket.io": "^2.1.1"
+  }
+}

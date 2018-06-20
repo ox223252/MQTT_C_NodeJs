@@ -1,0 +1,3 @@
+[submodule "C/Configure"]
+	path = C/Configure
+	url = git@github.com:ox223252/Configure.git

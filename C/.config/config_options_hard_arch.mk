@@ -1,0 +1,1 @@
+HARD_ARCH=natif
