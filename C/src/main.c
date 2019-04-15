@@ -3,6 +3,8 @@
 #include <stdio.h>
 
 // to install mosquitto :
+// apt install libmosquitto-dev
+// or
 // git clone https://github.com/eclipse/mosquitto.git
 // make
 // make install
@@ -56,7 +58,7 @@ int main ( void )
 	mosquitto_disconnect_callback_set ( mosq, disconnectCallback );
 	mosquitto_publish_callback_set ( mosq, publishCallback );
 
-	if ( mosquitto_will_set ( mosq, "/data", 16, "C client stoped", 0, 0 ) )
+	if ( mosquitto_will_set ( mosq, "/data", 16, "C client stopped", 0, 0 ) )
 	{
 		return ( __LINE__ );
 	}
